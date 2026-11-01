@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tata Elxsi SDV — Automotive Digital Cockpit & VehicleGPT</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Orbitron:wght@600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body class="luxury-cockpit-body">
+
+  <!-- Ambient Cockpit Underglow -->
+  <div class="underglow cyan-glow"></div>
+  <div class="underglow purple-glow"></div>
+
+  <!-- Main Automotive Cockpit Display (100% Screen Responsive Chassis) -->
+  <main class="dashboard-chassis">
+    
+    <!-- Emergency Warning Alarm HUD Banner -->
+    <div id="emergency-alarm-banner" class="emergency-alarm-banner hidden">
+      <div class="alarm-content">
+        <div class="alarm-siren-box">
+          <span class="alarm-siren-icon">🚨</span>
+        </div>
+        <div class="alarm-text-group">
+          <div class="alarm-title-row">
+            <span class="alarm-title" id="alarm-banner-title">CRITICAL SAFETY ALARM ACTIVE</span>
+            <span class="alarm-badge" id="alarm-banner-badge">CLOSED-LOOP DERATE</span>
+          </div>
+          <span class="alarm-desc" id="alarm-banner-desc">Battery coolant pump failure (DTC P0C73) — Active 50% thermal derate. Pull over safely!</span>
+        </div>
+        <div class="alarm-actions">
+          <button id="btn-silence-alarm" class="alarm-btn silence-btn" title="Silence Audible Alarm">
+            <span id="silence-icon">🔊</span> <span id="silence-label">Silence Chime</span>
+          </button>
+          <button id="btn-alarm-clear-all" class="alarm-btn clear-btn" title="Clear All Faults">
+            ✅ Clear Faults
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3-Column Core Automotive Digital Cockpit Grid -->
+    <div class="cockpit-main-layout">
+
+      <!-- =====================================================================
+           COLUMN 1 (LEFT): Vehicle Overview, Live Sensors & Fault Injection
+           ===================================================================== -->
+      <section class="dash-col col-overview" aria-label="Vehicle Overview and Sensor Controls">
+        
+        <!-- Car Render Card with Glowing Underglow -->
+        <div class="overview-car-card">
+          <div class="car-image-box">
+            <svg class="car-watermark-svg" viewBox="0 0 300 120" preserveAspectRatio="none">
+              <path d="M 30 90 Q 70 30 140 40 Q 200 10 270 50 Q 240 70 210 60 Q 180 85 130 80 Z" fill="rgba(255,255,255,0.03)"/>
+            </svg>
+            <img src="/static/car_asset.jpg" alt="Tata Elxsi SDV Electric Sedan" class="car-render-img">
+            <div class="car-underglow-effect"></div>
+          </div>
+          <div class="car-title-group">
+            <span class="label-tiny">VEHICLE ARCHITECTURE</span>
+            <h2 class="car-model-name">Tata Elxsi SDV EV</h2>
+          </div>
+        </div>
+
+        <!-- 4 Primary Telemetry Metric Tiles -->
+        <div class="metric-tiles-grid">
+          <!-- Battery Condition -->
+          <div class="metric-tile" id="tile-batt-cond">
+            <div class="tile-icon-circle green" id="icon-batt-cond">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+            </div>
+            <div class="tile-texts">
+              <span class="tile-value" id="val-batt-cond">Good</span>
+              <span class="tile-label">Battery Health</span>
+            </div>
+          </div>
+
+          <!-- SOC % -->
+          <div class="metric-tile">
+            <div class="tile-icon-circle cyan">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M19.77 7.23l.01-.01-3.72-3.72L15 4.56l2.11 2.11c-.94.36-1.61 1.26-1.61 2.33 0 1.38 1.12 2.5 2.5 2.5.36 0 .69-.08 1-.21v7.21c0 .55-.45 1-1 1s-1-.45-1-1V14c0-1.1-.9-2-2-2h-1V5c0-1.1-.9-2-2-2H6c-1.1 0-2 .9-2 2v16h10v-7.5h1.5v5c0 1.38 1.12 2.5 2.5 2.5s2.5-1.12 2.5-2.5V9c0-.69-.28-1.32-.73-1.77zM12 10H6V5h6v5zm6 0c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1z"/></svg>
+            </div>
+            <div class="tile-texts">
+              <span class="tile-value" id="val-soc">76%</span>
+              <span class="tile-label" id="lbl-range">275 km Est. Range</span>
+            </div>
+          </div>
+
+          <!-- Pack Temp -->
+          <div class="metric-tile" id="tile-pack-temp">
+            <div class="tile-icon-circle emerald" id="icon-pack-temp">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+            </div>
+            <div class="tile-texts">
+              <span class="tile-value" id="val-temp">32.4°C</span>
+              <span class="tile-label">Pack Temperature</span>
+            </div>
+          </div>
+
+          <!-- TPMS FL -->
+          <div class="metric-tile" id="tile-tpms-fl">
+            <div class="tile-icon-circle yellow" id="icon-tpms-fl">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M4 11h16v2H4zm0-4h16v2H4zm0 8h16v2H4z"/></svg>
+            </div>
+            <div class="tile-texts">
+              <span class="tile-value" id="val-psi">36 psi</span>
+              <span class="tile-label">Tire Pressure (FL)</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Deep Powertrain Diagnostics & Longitudinal Physics Card -->
+        <div class="deep-diagnostics-card">
+          <div class="diag-header">
+            <span class="widget-label">LIVE SENSOR TELEMETRY & PHYSICS DECOMPOSITION</span>
+            <span class="derate-badge" id="disp-derate-badge">DERATE: OFF</span>
+          </div>
+
+          <div class="diag-stats-grid">
+            <div class="d-cell">
+              <span class="d-label">PACK VOLTAGE</span>
+              <span class="d-val" id="val-voltage">382.4 V</span>
+            </div>
+            <div class="d-cell">
+              <span class="d-label">PACK CURRENT</span>
+              <span class="d-val" id="val-current">18.2 A</span>
+            </div>
+            <div class="d-cell">
+              <span class="d-label">MOTOR POWER</span>
+              <span class="d-val" id="val-power">+8.5 kW</span>
+            </div>
+            <div class="d-cell">
+              <span class="d-label">INVERTER EFF.</span>
+              <span class="d-val text-mint" id="val-inv-eff">96.2%</span>
+            </div>
+          </div>
+
+          <!-- 4-Wheel TPMS Grid -->
+          <div class="tpms-wheels-strip">
+            <div class="tpms-wheel" id="wheel-fl"><span class="w-name">FL</span><span class="w-psi" id="tpms-val-fl">36 psi</span></div>
+            <div class="tpms-wheel" id="wheel-fr"><span class="w-name">FR</span><span class="w-psi">36 psi</span></div>
+            <div class="tpms-wheel" id="wheel-rl"><span class="w-name">RL</span><span class="w-psi">36 psi</span></div>
+            <div class="tpms-wheel" id="wheel-rr"><span class="w-name">RR</span><span class="w-psi">36 psi</span></div>
+          </div>
+
+          <!-- Longitudinal Physics Energy Force Breakdown -->
+          <div class="physics-forces-row">
+            <div class="p-force"><span>Aero Drag:</span> <b id="val-force-aero">242 N</b></div>
+            <div class="p-force"><span>Rolling:</span> <b id="val-force-roll">194 N</b></div>
+            <div class="p-force"><span>HVAC:</span> <b id="val-force-hvac">1.2 kW</b></div>
+            <div class="p-force"><span>Regen:</span> <b id="val-force-regen" class="text-mint">-6.4 kW</b></div>
+          </div>
+        </div>
+
+        <!-- Sensor Fault Injection & ECU Reaction Panel (Problem Statement Core!) -->
+        <div class="fault-injection-card">
+          <div class="fault-header">
+            <span class="widget-label">SENSOR FAULT INJECTION & CLOSED-LOOP REACTION</span>
+            <span class="sub-alert-tag">CASE STUDY 5 EVALUATION</span>
+          </div>
+          
+          <div class="fault-buttons-grid">
+            <button class="fault-btn" id="btn-fault-pump" data-fault="coolant_pump" title="Simulate Battery Coolant Pump Stalling">
+              <span class="fb-icon">🔥</span>
+              <div class="fb-info">
+                <span class="fb-title">Coolant Pump Fail</span>
+                <span class="fb-dtc">DTC P0C73 · Triggers 50% Derate</span>
+              </div>
+            </button>
+
+            <button class="fault-btn" id="btn-fault-puncture" data-fault="tpms_puncture" title="Simulate Front-Left Tire Puncture to 18 psi">
+              <span class="fb-icon">⚠️</span>
+              <div class="fb-info">
+                <span class="fb-title">Tire Puncture FL</span>
+                <span class="fb-dtc">DTC C0035 · Crr Spikes +45%</span>
+              </div>
+            </button>
+
+            <button class="fault-btn" id="btn-fault-heat" data-fault="ambient_heat" title="Simulate 42°C Extreme Heatwave">
+              <span class="fb-icon">☀️</span>
+              <div class="fb-info">
+                <span class="fb-title">Ambient Heat 42°C</span>
+                <span class="fb-dtc">HVAC 3.5 kW · Range Drops</span>
+              </div>
+            </button>
+
+            <button class="fault-btn" id="btn-fault-inverter" data-fault="inverter" title="Simulate Motor Inverter Thermal Overload">
+              <span class="fb-icon">⚡</span>
+              <div class="fb-info">
+                <span class="fb-title">Inverter Overheat</span>
+                <span class="fb-dtc">DTC P0A0F · Torque Limited</span>
+              </div>
+            </button>
+
+            <button class="fault-btn" id="btn-fault-adas" data-fault="adas_occlusion" title="Simulate Camera/Radar Vision Blocked">
+              <span class="fb-icon">🚫</span>
+              <div class="fb-info">
+                <span class="fb-title">ADAS Vision Blind</span>
+                <span class="fb-dtc">DTC U0100 · Takeover Request</span>
+              </div>
+            </button>
+
+            <button class="fault-btn all-faults-btn" id="btn-fault-all" data-fault="all_faults" title="Simulate Simultaneous Total Cascade Failure — All Subsystems">
+              <span class="fb-icon">💥</span>
+              <div class="fb-info">
+                <span class="fb-title">Trigger All Faults</span>
+                <span class="fb-dtc">All Subsystems · Full Emergency Stop</span>
+              </div>
+            </button>
+
+            <button class="fault-btn reset-btn" id="btn-fault-clear" data-fault="clear" title="Clear All Injected Faults and Restore Nominal Health">
+              <span class="fb-icon">🟢</span>
+              <div class="fb-info">
+                <span class="fb-title">Clear All Faults</span>
+                <span class="fb-dtc">Restore Nominal 100% Health</span>
+              </div>
+            </button>
+          </div>
+
+          <!-- Live Diagnostic slog2 Event Ticker -->
+          <div class="diag-ticker" id="diag-ticker">
+            <span class="ticker-prefix">DIAG SLOG2:</span>
+            <span class="ticker-text" id="ticker-text">Nominal powertrain telemetry running. Zero active DTCs.</span>
+          </div>
+        </div>
+
+      </section>
+
+
+      <!-- =====================================================================
+           COLUMN 2 (CENTER): Perfect Speedometer & CARLA Camera with Lane Perception
+           ===================================================================== -->
+      <section class="dash-col col-center" aria-label="Speedometer and CARLA Live Perception Camera">
+        
+        <!-- Top: Centered Curved Speedometer Arc Gauge with Symmetrical Wings & Gear Strip -->
+        <div class="speedometer-arc-panel">
+          <div class="speedo-cluster-container">
+            
+            <!-- Left Wing: Motor Power / Regen Gauge (Cyan) -->
+            <div class="cluster-wing left-wing">
+              <div class="wing-gauge-wrap">
+                <svg class="wing-svg" viewBox="0 0 110 70">
+                  <path class="wing-track-bg" d="M 15 62 A 52 52 0 0 1 85 15" fill="none" stroke="#131B2A" stroke-width="8" stroke-linecap="round"/>
+                  <path class="wing-track-cyan" id="power-gauge-bar" d="M 15 62 A 52 52 0 0 1 85 15" fill="none" stroke="#00F2FE" stroke-width="8" stroke-linecap="round" stroke-dasharray="95" stroke-dashoffset="40"/>
+                </svg>
+              </div>
+              <div class="wing-info left">
+                <span class="wing-label">MOTOR POWER</span>
+                <span class="wing-val cyan" id="disp-pwr-kw">+0.0 kW</span>
+              </div>
+            </div>
+
+            <!-- Center Grand Speedometer -->
+            <div class="cluster-center-speed">
+              <svg class="center-speed-svg" viewBox="0 0 320 165">
+                <defs>
+                  <linearGradient id="speedGrad" x1="0%" y1="100%" x2="100%" y2="0%">
+                    <stop offset="0%" stop-color="#00F2FE"/>
+                    <stop offset="50%" stop-color="#0284C7"/>
+                    <stop offset="100%" stop-color="#38BDF8"/>
+                  </linearGradient>
+                  <filter id="cyanGlow" x="-20%" y="-20%" width="140%" height="140%">
+                    <feGaussianBlur stdDeviation="5" result="blur"/>
+                    <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+                  </filter>
+                  <linearGradient id="needleGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#FFFFFF"/>
+                    <stop offset="100%" stop-color="#00F2FE"/>
+                  </linearGradient>
+                </defs>
+
+                <!-- Outer Track Ring -->
+                <path d="M 45 150 A 120 120 0 1 1 275 150" fill="none" stroke="#0A101D" stroke-width="12" stroke-linecap="round"/>
+                <!-- Background Arc Track -->
+                <path class="gauge-track-bg" d="M 45 150 A 120 120 0 1 1 275 150" fill="none" stroke="#131B2A" stroke-width="8" stroke-linecap="round"/>
+
+                <!-- Calibration Speed Ticks & Numbers -->
+                <g class="speed-ticks" stroke="#334155" stroke-width="2" stroke-linecap="round">
+                  <line x1="45" y1="150" x2="57" y2="143" stroke="#64748B" stroke-width="2.5"/>
+                  <line x1="58" y1="108" x2="69" y2="107" stroke="#64748B"/>
+                  <line x1="88" y1="72" x2="98" y2="78" stroke="#64748B"/>
+                  <line x1="128" y1="46" x2="134" y2="56" stroke="#64748B"/>
+                  <line x1="160" y1="36" x2="160" y2="47" stroke="#00F2FE" stroke-width="2.5"/>
+                  <line x1="192" y1="46" x2="186" y2="56" stroke="#64748B"/>
+                  <line x1="232" y1="72" x2="222" y2="78" stroke="#64748B"/>
+                  <line x1="262" y1="108" x2="251" y2="107" stroke="#64748B"/>
+                  <line x1="275" y1="150" x2="263" y2="143" stroke="#EF4444" stroke-width="2.5"/>
+                </g>
+
+                <text x="56" y="136" fill="#64748B" font-size="8.5" font-family="'JetBrains Mono', monospace" font-weight="700">0</text>
+                <text x="82" y="72" fill="#64748B" font-size="8.5" font-family="'JetBrains Mono', monospace" font-weight="700">50</text>
+                <text x="153" y="32" fill="#00F2FE" font-size="9.5" font-family="'JetBrains Mono', monospace" font-weight="800">100</text>
+                <text x="226" y="72" fill="#64748B" font-size="8.5" font-family="'JetBrains Mono', monospace" font-weight="700">150</text>
+                <text x="248" y="136" fill="#EF4444" font-size="8.5" font-family="'JetBrains Mono', monospace" font-weight="700">220</text>
+
+                <!-- Active Glowing Cyan Speed Arc -->
+                <path class="gauge-track-active" id="speed-gauge-active" d="M 45 150 A 120 120 0 1 1 275 150" fill="none" stroke="url(#speedGrad)" stroke-width="8" stroke-linecap="round" filter="url(#cyanGlow)" stroke-dasharray="520" stroke-dashoffset="520"/>
+
+                <!-- Sleek Needle Pointer -->
+                <g id="needle-group" style="transform-origin: 160px 150px; transform: rotate(-110deg); transition: transform 0.2s cubic-bezier(0.1, 0.9, 0.2, 1);">
+                  <polygon points="158,150 162,150 161,46 159,46" fill="url(#needleGrad)"/>
+                  <circle cx="160" cy="46" r="2.5" fill="#00F2FE" filter="drop-shadow(0 0 6px #00F2FE)"/>
+                  <circle cx="160" cy="150" r="12" fill="#0D1322" stroke="#00F2FE" stroke-width="2.5"/>
+                  <circle cx="160" cy="150" r="5" fill="#00F2FE"/>
+                </g>
+              </svg>
+
+              <!-- Center Digital Speed Display -->
+              <div class="speed-center-readout">
+                <span class="speed-num-large" id="disp-speed">0</span>
+                <span class="speed-unit-text">km/h</span>
+              </div>
+            </div>
+
+            <!-- Right Wing: Battery SOC Gauge (Properly Aligned & In Vibrant GREEN!) -->
+            <div class="cluster-wing right-wing">
+              <div class="wing-gauge-wrap">
+                <svg class="wing-svg" viewBox="0 0 110 70">
+                  <defs>
+                    <filter id="greenGlow" x="-20%" y="-20%" width="140%" height="140%">
+                      <feGaussianBlur stdDeviation="4" result="blur"/>
+                      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+                    </filter>
+                  </defs>
+                  <path class="wing-track-bg" d="M 95 62 A 52 52 0 0 0 25 15" fill="none" stroke="#131B2A" stroke-width="8" stroke-linecap="round"/>
+                  <path class="wing-track-green" id="soc-gauge-bar" d="M 95 62 A 52 52 0 0 0 25 15" fill="none" stroke="#00FF87" stroke-width="8" stroke-linecap="round" filter="url(#greenGlow)" stroke-dasharray="95" stroke-dashoffset="15"/>
+                </svg>
+              </div>
+              <div class="wing-info right">
+                <span class="wing-label green">BATTERY SOC</span>
+                <span class="wing-val green" id="disp-soc-pct">87%</span>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Transmission Gear Selector Strip -->
+          <div class="gear-selector-bar">
+            <span class="gear-slot" data-gear="P">P</span>
+            <span class="gear-slot" data-gear="R">R</span>
+            <span class="gear-slot" data-gear="N">N</span>
+            <span class="gear-slot" data-gear="D1">D1</span>
+            <span class="gear-slot" data-gear="D2">D2</span>
+            <span class="gear-slot" data-gear="D3">D3</span>
+            <span class="gear-slot active-gear" id="slot-gear-d4" data-gear="D4">D4</span>
+            <span class="gear-slot" data-gear="D5">D5</span>
+          </div>
+        </div>
+
+        <!-- Bottom: CARLA First-Person Cockpit View with Computer Vision Lane Detection (ENLARGED & CINEMATIC!) -->
+        <div class="carla-camera-panel enlarged">
+          <div class="cam-top-control-bar">
+            <div class="cam-title-group">
+              <span class="pulse-dot red"></span>
+              <span class="cam-heading">CARLA FIRST-PERSON COCKPIT VIEW · CV LANE DETECTION</span>
+            </div>
+            
+            <div class="cam-actions-group">
+              <!-- City Map Switcher -->
+              <select id="carla-city-select" class="cam-select" title="Switch CARLA World Map">
+                <option value="Town04" selected>Town04 (Highway Loop)</option>
+                <option value="Town04_City">Town04 (Town Center)</option>
+                <option value="Town03">Town03 (Urban City)</option>
+                <option value="Town01">Town01 (Suburban)</option>
+                <option value="Town05">Town05 (Freeway)</option>
+              </select>
+
+              <!-- Weather Presets -->
+              <select id="carla-weather-select" class="cam-select" title="Change Weather">
+                <option value="ClearNoon" selected>Clear Noon</option>
+                <option value="WetSunset">Wet Sunset</option>
+                <option value="MidRainyNoon">Rainy Noon</option>
+                <option value="HardRainNoon">Heavy Storm</option>
+              </select>
+
+              <!-- Camera View Angle -->
+              <select id="carla-view-select" class="cam-select" title="Camera Angle">
+                <option value="cockpit" selected>Cockpit Driver</option>
+                <option value="hood">Forward Hood</option>
+                <option value="chase">Chase View</option>
+              </select>
+
+              <!-- Autopilot Toggle Button -->
+              <button class="cam-btn ap-btn" id="btn-toggle-ap" title="Toggle CARLA Autopilot">
+                ● AUTOPILOT ON
+              </button>
+            </div>
+          </div>
+
+          <!-- Video Viewport -->
+          <div class="camera-stream-container">
+            <img id="carla-stream-img" src="/api/carla/stream" alt="" 
+                 onerror="handleStreamError(this)" onload="handleStreamLoaded(this)">
+            
+            <!-- Real-Time HUD Overlay Indicators on Camera -->
+            <div class="cam-hud-badge top-left-badge" id="cam-active-city-badge">Town04 (Highway)</div>
+            <div class="cam-hud-badge top-right-badge" id="cam-fps-badge">20 FPS · 50 ms</div>
+            
+            <div class="cam-hud-badge bottom-center-badge">
+              <span>ADAS: <b>LANE KEEP ASSIST ON</b></span>
+              <span>·</span>
+              <span>FORWARD RADAR: <b>ACTIVE</b></span>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+
+      <!-- =====================================================================
+           COLUMN 3 (RIGHT): Minimal & Navigative VehicleGPT AI Copilot
+           ===================================================================== -->
+      <section class="dash-col col-copilot" aria-label="VehicleGPT On-Device AI Copilot">
+        
+        <!-- Minimal Copilot Navigation Header -->
+        <div class="copilot-minimal-header">
+          <div class="c-min-left">
+            <span class="bot-status-ring"><span class="pulse-dot green"></span></span>
+            <div class="c-title-box">
+              <span class="c-title">VehicleGPT AI</span>
+              <span class="c-sub">QWEN2.5:1.5B · &lt;15ms FACTS</span>
+            </div>
+          </div>
+
+          <div class="c-min-right">
+            <!-- Mode Toggle: Simple Driver vs Detailed Engineering -->
+            <div class="mode-toggle-bar">
+              <button class="mode-tab active" id="btn-mode-simple" data-mode="simple" title="Driver Simple Glance">💡 Simple</button>
+              <button class="mode-tab" id="btn-mode-detailed" data-mode="detailed" title="Engineering Deep Diagnostics">🔬 Detailed</button>
+            </div>
+            <!-- Language Quick Pills -->
+            <div class="lang-pills-bar">
+              <button class="lang-tab active" data-lang="en">EN</button>
+              <button class="lang-tab" data-lang="hi">हिन्दी</button>
+              <button class="lang-tab" data-lang="te">తెలుగు</button>
+              <button class="lang-tab" data-lang="ta">தமிழ்</button>
+            </div>
+            <!-- Persona Selector Dropdown -->
+            <select id="role-select" class="role-dropdown-mini" title="Change Copilot Persona">
+              <option value="driver" selected>Driver</option>
+              <option value="service">Service</option>
+              <option value="fleet">Fleet</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Easy Navigative Horizontal Quick Prompt Chips Tray -->
+        <div class="copilot-quick-tray" title="Click any query to ask VehicleGPT">
+          <button class="pdf-chip quick-pill" data-query="Why has my driving range reduced over the last two weeks?">
+            📉 Range Drop
+          </button>
+          <button class="pdf-chip quick-pill" data-query="What happened before the battery overheating warning?">
+            🔥 Battery Heat
+          </button>
+          <button class="pdf-chip quick-pill" data-query="When did fuel efficiency show the largest drop?">
+            ⚡ Efficiency
+          </button>
+          <button class="pdf-chip quick-pill" data-query="Show all ADAS disengagement events from yesterday.">
+            🚗 ADAS Takeover
+          </button>
+          <button class="pdf-chip quick-pill" data-query="Compare energy consumption between city and highway driving.">
+            🏙️ City vs Hwy
+          </button>
+          <button class="pdf-chip quick-pill hindi" data-query="मेरी रेंज क्यों कम हो गई?">
+            🇮🇳 रेंज कम क्यों हुई?
+          </button>
+          <button class="pdf-chip quick-pill telugu" data-query="నా డ్రైవింగ్ రేంజ్ ఎందుకు తగ్గింది?">
+            🇮🇳 రేంజ్ తగ్గింది?
+          </button>
+          <button class="pdf-chip quick-pill tamil" data-query="எனது டிரைவிங் ரேஞ்ச் ஏன் குறைந்தது?">
+            🇮🇳 ரேஞ்ச் குறைந்தது?
+          </button>
+        </div>
+
+        <!-- Conversation History Stream (Now gets 80%+ of vertical space!) -->
+        <div class="copilot-chat-stream" id="chat-messages">
+          <div class="chat-bubble bot-bubble">
+            <div class="bubble-meta">
+              <span class="bubble-sender">VEHICLEGPT ASSISTANT</span>
+              <span class="bubble-tag">ON-DEVICE SLM</span>
+            </div>
+            <p>Hello! I am your <b>offline automotive cognitive copilot</b>. Tap any prompt above or speak via microphone to get instant <b>&lt;15 ms deterministic diagnostic facts</b>.</p>
+          </div>
+        </div>
+
+        <!-- Minimal Voice & Chat Input Dock -->
+        <div class="copilot-input-dock">
+          <!-- Voice Mic Input -->
+          <button class="dock-action-btn mic-btn" id="btn-voice-input" title="Voice Recognition (Web Speech API)">
+            🎤
+          </button>
+          <!-- Text Prompt Input -->
+          <input type="text" id="chat-text-input" placeholder="Ask VehicleGPT in English, Hindi, Telugu, or Tamil..." autocomplete="off">
+          <!-- Speech Synthesis Speaker Toggle -->
+          <button class="dock-action-btn tts-btn active" id="btn-tts-toggle" title="Toggle Voice Readback">
+            🔊
+          </button>
+          <!-- Send Button -->
+          <button class="dock-action-btn send-btn" id="btn-chat-send" title="Send Message">
+            ➔
+          </button>
+        </div>
+
+      </section>
+
+    </div>
+
+  </main>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

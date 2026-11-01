@@ -1,0 +1,12 @@
+# Core (Windows / Linux / Raspberry Pi)
+streamlit>=1.40
+pandas>=2.0
+numpy>=1.26
+requests>=2.31
+psutil>=5.9
+
+# Optional
+# pip install faster-whisper   # offline voice questions (tiny model, CPU)
+# pip install python-can       # real SocketCAN / PCAN / Kvaser / udp_multicast buses (VGPT_CAN=socketcan)
+# pip install pytest           # python -m pytest tests -v
+# CARLA: install the wheel from <CARLA folder>/PythonAPI/carla/dist matching your Python (cp312 for 3.12)
