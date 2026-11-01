@@ -3,12 +3,18 @@
 [![Python Version](https://img.shields.io/badge/Python-3.12%2B-blue.svg)](https://www.python.org/)
 [![Simulation](https://img.shields.io/badge/Simulation-CARLA%200.9.16-success.svg)](https://carla.org/)
 [![Local LLM](https://img.shields.io/badge/Local%20LLM-Ollama%20%7C%20Qwen2.5--1.5B-orange.svg)](https://ollama.ai/)
+[![Demo Video](https://img.shields.io/badge/Demo%20Video-Google%20Drive-red.svg)](https://drive.google.com/drive/folders/1B3jZHPINCD7oXFJ57fBMOBP6nsmdrmzn?usp=sharing)
 [![Protocol](https://img.shields.io/badge/Protocols-CAN%20DBC%20%7C%20SOME%2FIP-informational.svg)]()
 [![Edge Deployment](https://img.shields.io/badge/Edge%20Profile-2%20Core%20%2F%202%20GB%20RAM-purple.svg)]()
 [![Privacy](https://img.shields.io/badge/Data%20Privacy-100%25%20On--Device%20%2F%20Air--Gapped-green.svg)]()
 
 > **Automotive Industry Evaluation & Engineering Demonstration**  
 > An edge-native, zero-cloud in-cabin conversational diagnostics assistant for Software-Defined Vehicles (SDVs). VehicleGPT listens to real-time CAN bus frames, SOME/IP services, and diagnostic logs, correlates weeks of telemetry history on-device, and provides natural-language root-cause explanations grounded in deterministic physics.
+
+> [!TIP]
+> **Live Engineering Demo Video**:  
+> Watch the complete end-to-end CARLA simulation, fault injection, and multilingual Ollama in-cabin assistant demonstration:  
+> [**Watch the Demonstration Video on Google Drive**](https://drive.google.com/drive/folders/1B3jZHPINCD7oXFJ57fBMOBP6nsmdrmzn?usp=sharing)
 
 ---
 
@@ -222,6 +228,7 @@ python -m ui.server
 
 | # | Demonstration Milestone | How to Validate | Expected Result |
 | :---: | :--- | :--- | :--- |
+| **0** | **Complete Video Walkthrough** | [Google Drive Demo Folder](https://drive.google.com/drive/folders/1B3jZHPINCD7oXFJ57fBMOBP6nsmdrmzn?usp=sharing) | Full video demonstration of CARLA autonomy, Ollama multilingual AI, and safety supervisor. |
 | **1** | **Live CAN & SOME/IP Streaming** | Open `http://localhost:8080` | Speed dials, battery SOC, and energy stream update in real time at 10-20 Hz. |
 | **2** | **Single Fault Safety Decoupling** | Click `❄️ Coolant Pump Failure` | Vehicle slows by 40% but **keeps cruising**; cockpit displays in-drive warning card and audio chime. |
 | **3** | **Zero-Hallucination Querying** | Click chip: *"Why is my range dropping?"* | Instant response decomposing exact kWh losses (HVAC, aerodynamic drag, rolling drag). |
